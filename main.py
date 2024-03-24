@@ -10,10 +10,12 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Student Management System")
+        self.setFixedWidth(400)
 
         # Create menu items
         file_menu_item = self.menuBar().addMenu("&File")
         help_menu_item = self.menuBar().addMenu("&Help")
+        edit_menu_item = self.menuBar().addMenu("&Edit")
 
         # Create sub-menu items
         add_student_action = QAction("Add Student", self)
@@ -22,6 +24,10 @@ class MainWindow(QMainWindow):
 
         about_action = QAction("About", self)
         help_menu_item.addAction(about_action)
+
+        search_action = QAction("Search", self)
+        search_action.triggered.connect(self.search)
+        edit_menu_item.addAction(search_action)
 
         # Create table
         self.table = QTableWidget()
@@ -43,6 +49,10 @@ class MainWindow(QMainWindow):
 
     def insert(self):
         dialog = InsertDialog()
+        dialog.exec()
+
+    def search(self):
+        dialog = SearchDialog()
         dialog.exec()
 
 
@@ -80,6 +90,7 @@ class InsertDialog(QDialog):
         self.setLayout(layout)
 
     def add_student(self):
+        """Add a student and their info to the database"""
         name = self.student_name.text()
         course = self.course_name.itemText(self.course_name.currentIndex())
         mobile = self.mobile.text()
@@ -91,6 +102,31 @@ class InsertDialog(QDialog):
         cursor.close()
         connection.close()
         main_window.load_data()
+
+
+class SearchDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Search Student")
+        self.setFixedWidth(300)
+        self.setFixedHeight(300)
+
+        layout = QVBoxLayout()
+
+        # Add search name widget
+        self.search_name = QLineEdit()
+        self.search_name.setPlaceholderText("Name")
+        layout.addWidget(self.search_name)
+
+        # Add submit button
+        button = QPushButton("Search")
+        layout.addWidget(button)
+        button.clicked.connect(self.search_student)
+
+        self.setLayout(layout)
+
+    def search_student(self):
+        pass
 
 
 app = QApplication(sys.argv)
