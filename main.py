@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QGridLayout, \
     QLineEdit, QPushButton, QMainWindow, QTableWidget, QTableWidgetItem, \
-    QDialog, QVBoxLayout
+    QDialog, QVBoxLayout, QComboBox
 from PyQt6.QtGui import *
 import sqlite3
 
@@ -55,10 +55,17 @@ class InsertDialog(QDialog):
 
         layout = QVBoxLayout()
 
+        # Add student name widget
         student_name = QLineEdit()
         student_name.setPlaceholderText("Name")
         layout.addWidget(student_name)
 
+        # Add course name widget
+        course_name = QComboBox()
+        courses = ["Biology", "Math", "Astronomy", "Physics"]
+        course_name.addItems(courses)
+        layout.addWidget(course_name)
+        self.setLayout(layout)
 
 app = QApplication(sys.argv)
 age_calculator = MainWindow()
